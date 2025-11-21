@@ -1,0 +1,54 @@
+/* src/index.css */
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6f8;
+}
+
+/* hero accent - uses your uploaded screenshot path */
+.app-hero {
+  background-image: url("/mnt/data/Screenshot 2022-01-15 at 9.11.36 AM.webp");
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  min-height: 120px;
+}
+
+/* layout */
+.container-main {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* left sidebar */
+.sidebar {
+  width: 220px;
+}
+
+/* center content */
+.content {
+  flex: 1;
+  min-height: calc(100vh - 160px);
+}
+
+/* card wrapper */
+.mail-card {
+  background: white;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* mails list row */
+.mail-row {
+  display:flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+.mail-row:hover { background: #fafafa; }
+
+.small-muted { color: #666; font-size: 0.9rem; }

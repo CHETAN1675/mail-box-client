@@ -1,35 +1,59 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { useState } from "react";
+import { Navbar as RBNavbar, Container, Nav, Button, Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, setEmail } from "../store/authSlice";
 
-export default function Navigation({ isLoggedIn, onLogout }) {
+export default function Navbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
+  const [temp, setTemp] = useState(auth.email || "");
+
+  const handleSetUser = (e) => {
+    e.preventDefault();
+    if (!temp) return;
+    dispatch(setEmail(temp));
+    alert("Current user set to: " + temp);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/auth");
+  };
+
   return (
-    <Navbar bg="light" expand="lg" className="shadow-sm mb-4">
+    <RBNavbar bg="light" expand="lg" className="shadow-sm">
       <Container>
-        <Navbar.Brand>Mail-Box-Client</Navbar.Brand>
+        <RBNavbar.Brand as={Link} to="/">MyWebLink Mail</RBNavbar.Brand>
 
-        <Navbar.Toggle />
+        <Nav className="m-auto">
+          {auth.isLoggedIn ? <Nav.Link as={Link} to="/inbox">Home</Nav.Link> : <div style={{padding: "8px 12px"}} className="small-muted">Home</div>}
+        </Nav>
 
-        <Navbar.Collapse>
-          <Nav className="m-auto">
-            {isLoggedIn && (
-              <Nav.Link as={Link} to="/home">
-                Home
-              </Nav.Link>
-            )}
-          </Nav>
+        <Form className="d-flex align-items-center me-2" onSubmit={handleSetUser}>
+          <Form.Control
+            type="email"
+            placeholder="set current user email"
+            value={temp}
+            onChange={(e) => setTemp(e.target.value)}
+            style={{ width: 260, marginRight: 8 }}
+          />
+          <Button variant="outline-primary" size="sm" type="submit">Set</Button>
+        </Form>
 
-          <Nav>
-            {!isLoggedIn && <Nav.Link as={Link} to="/auth">Login</Nav.Link>}
+        <div style={{ marginLeft: 12, fontSize: 14 }} className="small-muted">
+          {auth.email || "Not logged in"}
+        </div>
 
-            {isLoggedIn && (
-              <Nav.Link onClick={onLogout} style={{ color: "red" }}>
-                Logout
-              </Nav.Link>
-            )}
-          </Nav>
-        </Navbar.Collapse>
+        <div style={{ marginLeft: 12 }}>
+          {auth.isLoggedIn ? (
+            <Button variant="outline-danger" size="sm" onClick={handleLogout}>Logout</Button>
+          ) : (
+            <Button as={Link} to="/auth" variant="outline-primary" size="sm">Login</Button>
+          )}
+        </div>
       </Container>
-    </Navbar>
+    </RBNavbar>
   );
 }
