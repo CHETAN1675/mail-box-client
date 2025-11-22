@@ -1,0 +1,14 @@
+/* src/components/MailView.css */
+.mailview-container {
+  display: flex;
+  gap: 20px;
+}
+
+.mailview-main {
+  flex: 1;
+}
+
+.mailview-meta {
+  color: #666;
+  margin-bottom: 12px;
+}

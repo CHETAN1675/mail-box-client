@@ -1,0 +1,15 @@
+/* src/components/Inbox.css */
+/* Container-specific styles for Inbox */
+.inbox-container {
+  display: flex;
+  gap: 20px;
+}
+
+.inbox-main {
+  flex: 1;
+}
+
+.small-muted {
+  color: #666;
+  font-size: 0.9rem;
+}

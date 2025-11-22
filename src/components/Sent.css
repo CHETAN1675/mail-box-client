@@ -1,0 +1,10 @@
+
+.sent-container {
+  display: flex;
+  gap: 20px;
+}
+
+.small-muted {
+  color: #666;
+  font-size: 0.9rem;
+}

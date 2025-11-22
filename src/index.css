@@ -8,7 +8,6 @@ body, html, #root {
 
 /* hero accent - uses your uploaded screenshot path */
 .app-hero {
-  background-image: url("/mnt/data/Screenshot 2022-01-15 at 9.11.36 AM.webp");
   background-position: right top;
   background-repeat: no-repeat;
   background-size: contain;
