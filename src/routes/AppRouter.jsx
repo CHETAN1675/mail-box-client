@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Header";
 import AuthForm from "../components/authform";
-import ComposeMail from "../components/composemail";
+import ComposeMail from "../components/ComposeMail";
 import Inbox from "../components/Inbox";
 import Sent from "../components/sent";
 import MailView from "../components/mailview";

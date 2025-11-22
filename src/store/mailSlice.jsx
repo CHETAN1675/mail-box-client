@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const cleanEmail = (email)=>email.replace(/[@.]/g,"_");
+
 const mailSlice = createSlice({
   name: "mail",
   initialState: {

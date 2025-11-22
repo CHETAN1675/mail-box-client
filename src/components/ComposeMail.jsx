@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import ReactQuill from "react-quill";
+import { useState } from "react";
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
 import { v4 as uuid } from "uuid";
 import { useSelector } from "react-redux";
 
@@ -7,9 +8,25 @@ export default function ComposeMail() {
   const userEmail = useSelector((state) => state.auth.email) || "";
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
-  const [body, setBody] = useState("");
+
+  // react-quilljs
+  const { quill, quillRef } = useQuill({
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ color: [] }, { background: [] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["blockquote", "clean"],
+      ],
+    },
+    theme: "snow",
+    placeholder: "Compose your message...",
+  });
 
   const sendMailHandler = async () => {
+    const body = quill ? quill.root.innerHTML : "";
+
     if (!to || !subject || !body || body.trim() === "") {
       alert("Please fill To, Subject and Body.");
       return;
@@ -22,40 +39,42 @@ export default function ComposeMail() {
     const senderKey = (userEmail || "unknown").replace(/\./g, "_");
 
     try {
-      await firebase.database().ref(`mails/inbox/${receiverKey}/${mailId}`).set({
-        id: mailId,
-        from: userEmail,
-        subject,
-        message: body,
-        date,
-      });
+      await fetch(
+        `https://mailbox-client-app-a6ede-default-rtdb.firebaseio.com/mails/inbox/${receiverKey}/${mailId}.json`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            id: mailId,
+            from: userEmail,
+            subject,
+            message: body,
+            date,
+          }),
+        }
+      );
 
-      await firebase.database().ref(`mails/sent/${senderKey}/${mailId}`).set({
-        id: mailId,
-        to,
-        subject,
-        message: body,
-        date,
-      });
+      await fetch(
+        `https://mailbox-client-app-a6ede-default-rtdb.firebaseio.com/mails/sent/${senderKey}/${mailId}.json`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            id: mailId,
+            to,
+            subject,
+            message: body,
+            date,
+          }),
+        }
+      );
 
       alert("Mail sent");
       setTo("");
       setSubject("");
-      setBody("");
+      if (quill) quill.setText("");
     } catch (err) {
       console.error(err);
-      alert("Error sending mail: " + err.message);
+      alert("Error sending mail");
     }
-  };
-
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ color: [] }, { background: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["blockquote", "clean"],
-    ],
   };
 
   return (
@@ -78,20 +97,20 @@ export default function ComposeMail() {
       </div>
 
       <div style={{ minHeight: 260, marginBottom: 12 }}>
-        <ReactQuill
-          value={body}
-          onChange={setBody}
-          theme="snow"
-          modules={quillModules}
-          placeholder="Compose your message..."
-        />
+        <div ref={quillRef} style={{ height: "240px" }} />
       </div>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button onClick={sendMailHandler} style={{
-          background: "#1a73e8", color: "#fff",
-          padding: "10px 18px", border: "none", borderRadius: 6
-        }}>
+        <button
+          onClick={sendMailHandler}
+          style={{
+            background: "#1a73e8",
+            color: "#fff",
+            padding: "10px 18px",
+            border: "none",
+            borderRadius: 6,
+          }}
+        >
           Send
         </button>
       </div>

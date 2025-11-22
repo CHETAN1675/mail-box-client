@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Navbar as RBNavbar, Container, Nav, Button, Form } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, setEmail } from "../store/authSlice";
 
-export default function Navbar() {
+export default function Hearder() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
@@ -23,9 +23,9 @@ export default function Navbar() {
   };
 
   return (
-    <RBNavbar bg="light" expand="lg" className="shadow-sm">
+    <Navbar bg="light" expand="lg" className="shadow-sm">
       <Container>
-        <RBNavbar.Brand as={Link} to="/">MyWebLink Mail</RBNavbar.Brand>
+        <Navbar.Brand as={Link} to="/">Mail Box Client</Navbar.Brand>
 
         <Nav className="m-auto">
           {auth.isLoggedIn ? <Nav.Link as={Link} to="/inbox">Home</Nav.Link> : <div style={{padding: "8px 12px"}} className="small-muted">Home</div>}
@@ -54,6 +54,6 @@ export default function Navbar() {
           )}
         </div>
       </Container>
-    </RBNavbar>
+    </Navbar>
   );
 }
