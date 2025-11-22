@@ -4,7 +4,7 @@ import AuthForm from "../components/authform";
 import ComposeMail from "../components/ComposeMail";
 import Inbox from "../components/Inbox";
 import Sent from "../components/sent";
-import MailView from "../components/mailview";
+import MailView from "../components/MailView";
 import { useSelector } from "react-redux";
 
 function ProtectedRoute({ children }) {
