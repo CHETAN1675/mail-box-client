@@ -9,7 +9,7 @@ import "./MailRow.css";
 export default function Sent() {
   const [mails, setMails] = useState([]);
   const currentEmail = useSelector((state) => state.auth.email) || "";
-  const key = currentEmail.replace(/[@.]/g, "_");
+  const key = currentEmail.replace(/\./g, "_");
 
   useEffect(() => {
     if (!key) return;

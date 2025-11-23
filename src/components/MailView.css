@@ -12,3 +12,28 @@
   color: #666;
   margin-bottom: 12px;
 }
+
+.mailview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mailview-delete-btn {
+  padding: 6px 14px;
+  background: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.mailview-delete-btn:hover {
+  background: #c9302c;
+}
+
+.mailview-message {
+  margin-top: 16px;
+  line-height: 1.6;
+}

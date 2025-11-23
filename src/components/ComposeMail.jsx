@@ -23,6 +23,18 @@ export default function ComposeMail() {
         ["clean"],
       ],
     },
+     formats: [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "color",
+    "background",
+    "list",
+    "blockquote",
+    "clean"
+  ],
     theme: "snow",
     placeholder: "Compose your message...",
   });
@@ -68,7 +80,7 @@ export default function ComposeMail() {
         `${DB_URL}/mails/inbox/${receiverKey}/${mailId}.json`,
         {
           method: "PUT",
-          body: JSON.stringify({receiverPayload}),
+          body: JSON.stringify(receiverPayload),
         }
       );
 
@@ -76,7 +88,7 @@ export default function ComposeMail() {
         `https://mailbox-client-app-a6ede-default-rtdb.firebaseio.com/mails/sent/${senderKey}/${mailId}.json`,
         {
           method: "PUT",
-          body: JSON.stringify({senderPayload}),
+          body: JSON.stringify(senderPayload),
         }
       );
 

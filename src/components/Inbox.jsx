@@ -11,7 +11,7 @@ export default function Inbox() {
    const [unreadCount, setUnreadCount] = useState(0);
 
   const currentEmail = useSelector((state) => state.auth.email) || "";
-  const key = currentEmail.replace(/[@.]/g, "_");
+  const key = currentEmail.replace(/\./g, "_");
 
   useEffect(() => {
     if (!key){

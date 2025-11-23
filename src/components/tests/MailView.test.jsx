@@ -1,35 +1,57 @@
 import { render, screen } from "@testing-library/react";
 import MailView from "../MailView";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import store from "../../store/store";
 
+// Mock useParams
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useParams: () => ({
+    box: "inbox",
+    mailId: "123"
+  })
+}));
 
-// Helper wrapper (since MailView uses Redux + Router)
+// Fake login so Redux has an email
+beforeEach(() => {
+  store.dispatch({
+    type: "auth/login",
+    payload: { email: "abc@example.com" }
+  });
+});
+
+// Render helper with real route
 const renderWithProviders = (ui) => {
+  window.history.pushState({}, "", "/mail/inbox/123");
+
   return render(
     <Provider store={store}>
-      <BrowserRouter>{ui}</BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/mail/:box/:mailId" element={ui} />
+        </Routes>
+      </BrowserRouter>
     </Provider>
   );
 };
 
-
 describe("MailView Component", () => {
+  const emailKey = "abc_example_com";
 
-  // 1. Should load mail data and display subject + body
+  // --------------------------------------
+  // 1. Load mail content
+  // --------------------------------------
   it("loads and displays mail content", async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () =>
-          Promise.resolve({
-            subject: "Hello World",
-            message: "<p>Mail content</p>",
-            read: false,
-            from: "abc@example.com"
-          })
-      })
-    );
+    global.fetch = jest.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          subject: "Hello World",
+          message: "<p>Mail content</p>",
+          read: false,
+          from: "abc@example.com"
+        })
+    });
 
     renderWithProviders(<MailView />);
 
@@ -37,13 +59,13 @@ describe("MailView Component", () => {
     expect(screen.getByText("Mail content")).toBeInTheDocument();
   });
 
-
-
-  // 2. Should mark unread inbox mail as read
+  // --------------------------------------
+  // 2. Mark unread inbox mail as read
+  // --------------------------------------
   it("marks mail as read when opened", async () => {
-
-    global.fetch = jest.fn()
-      // First fetch → mail data
+    global.fetch = jest
+      .fn()
+      // First fetch = mail data
       .mockResolvedValueOnce({
         json: () =>
           Promise.resolve({
@@ -53,19 +75,17 @@ describe("MailView Component", () => {
             from: "abc@example.com"
           })
       })
-      // Second fetch → PATCH call (mark read)
+      // Second fetch = PATCH call
       .mockResolvedValueOnce({
         json: () => Promise.resolve({})
       });
 
     renderWithProviders(<MailView />);
 
-    // Wait for mail to load
     await screen.findByText("New Mail");
 
-    // Check PATCH request
     expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining("/inbox/"),
+      expect.stringContaining(`/mails/inbox/${emailKey}/123.json`),
       expect.objectContaining({
         method: "PATCH",
         body: JSON.stringify({ read: true })
@@ -73,27 +93,24 @@ describe("MailView Component", () => {
     );
   });
 
-
-
-  // 3. Should show From/To metadata
+  // --------------------------------------
+  // 3. Shows metadata
+  // --------------------------------------
   it("shows correct metadata", async () => {
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () =>
-          Promise.resolve({
-            subject: "Meta Test",
-            message: "",
-            read: true,
-            from: "sender@mail.com",
-            to: "receiver@mail.com",
-            date: 1725859911111
-          })
-      })
-    );
+    global.fetch = jest.fn().mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          subject: "Meta Test",
+          message: "",
+          read: true,
+          from: "sender@mail.com",
+          to: "receiver@mail.com",
+          date: 1725859911111
+        })
+    });
 
     renderWithProviders(<MailView />);
 
     expect(await screen.findByText(/From:/i)).toBeInTheDocument();
   });
-
 });
