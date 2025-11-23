@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useQuill } from "react-quilljs";
-import "quill/dist/quill.snow.css";
 import { v4 as uuid } from "uuid";
 import { useSelector } from "react-redux";
 import { DB_URL } from "../firebaseDB";
+import { Button } from "react-bootstrap";
 import "./ComposeMail.css";
+import "quill/dist/quill.snow.css";
 
 export default function ComposeMail() {
   const userEmail = useSelector((state) => state.auth.email) || "";
@@ -103,7 +104,7 @@ export default function ComposeMail() {
   };
 
   return (
-    <div>
+    <div className="compose-wrapper" >
       <div style={{ marginBottom: 12 }}>
         <input
         className="compose-input"
@@ -126,10 +127,10 @@ export default function ComposeMail() {
       </div>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button
+        <Button
           onClick={sendMailHandler} className="compose-send">
           Send
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -1,0 +1,26 @@
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 0.5rem 1rem;
+}
+
+.navbar .navbar-brand {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.navbar .nav-link {
+  color: #333;
+  font-weight: 500;
+}
+
+.navbar .nav-link.active {
+  color: #1a73e8;
+}

@@ -1,51 +1,15 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Sidebar from "./Sidebar";
-import { DB_URL } from "../firebaseDB";
+import useFetchMails from "../hooks/useFetchMails"; 
 import "./Sent.css";
 import "./MailRow.css";
 
+ 
+
 export default function Sent() {
-  const [mails, setMails] = useState([]);
-  const currentEmail = useSelector((state) => state.auth.email) || "";
-  const key = currentEmail.replace(/\./g, "_");
-
-  useEffect(() => {
-    if (!key) return;
-
-    let cancelled = false;
-
-    async function loadSent() {
-      try {
-        const res = await fetch (`${DB_URL}/mails/sent/${key}.json`);
-
-        const data = await res.json();
-        if (!data) {
-          if(!cancelled) setMails([]);
-          return;
-        }
-
-         const arr = Object.values(data).map((mail) => ({
-          id: mail.id,
-          ...mail,
-        }));
-
-     arr.sort((a, b) => (new Date(b.date) - new Date(a.date)));
-
-        if(!cancelled) setMails(arr);
-      } catch (err) {
-        console.error("Fetch error:", err);
-      }
-    }
-
-    loadSent();
-
-        const interval = setInterval(loadSent, 15000);
-        return () => clearInterval(interval);
-
-  }, [key]);
-
+  const email = useSelector((state) => state.auth.email) || "";
+  const { mails } = useFetchMails("sent", email);
   return (
     <div style={{ display: "flex", gap: 20 }}>
       <div style={{ width: 240 }}>

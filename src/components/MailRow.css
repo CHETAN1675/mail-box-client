@@ -1,84 +1,77 @@
-/* src/components/MailRow.css */
-/* Gmail-style two-line layout, unread dot on left, basic hover + spacing */
-
 .mail-row {
   display: flex;
-  gap: 12px;
+  justify-content: space-between;
   align-items: flex-start;
   padding: 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid  #e0e0e0;
   cursor: pointer;
-  text-decoration: none;
-  color: inherit;
+  transition: background 0.2s;
 }
 
 .mail-row:hover {
-  background: #fafafa;
+  background:  #f8f9fa;
 }
 
-/* left column (dot) */
+
 .unread-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #007bff; /* blue dot */
-  margin-top: 8px; /* position roughly aligned with first line */
-  flex: 0 0 auto;
+  background: #1a73e8;
+   margin-right: 12px;
+  margin-top: 8px; 
+
 }
 
-/* empty placeholder to keep alignment for read messages */
 .unread-dot--invisible {
   width: 10px;
   height: 10px;
+  margin-right: 12px;
   margin-top: 8px;
-  flex: 0 0 auto;
   visibility: hidden;
 }
 
-/* main content (sender/subject/snippet) */
 .mail-row__content {
   flex: 1;
-  min-width: 0; /* allow ellipsis */
+  min-width: 0; 
 }
 
-/* top line: sender + subject */
+
 .mail-row__top {
   display: flex;
   gap: 8px;
   align-items: baseline;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .mail-row__sender {
   font-weight: 600;
-  margin-right: 6px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .mail-row__subject {
-  color: #444;
+  color: #555;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* snippet line */
+
 .mail-row__snippet {
-  color: #666;
+  color: #777;
   font-size: 0.9rem;
-  margin-top: 6px;
+  margin-top: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* right-side timestamp */
+
 .mail-row__time {
   color: #666;
   font-size: 0.85rem;
   margin-left: 12px;
-  flex: 0 0 auto;
-  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left:12px ;
 }

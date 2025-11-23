@@ -24,7 +24,7 @@ export default function Hearder() {
 
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm">
-      <Container>
+      <Container fluid>
         <Navbar.Brand as={Link} to="/">Mail Box Client</Navbar.Brand>
 
         <Nav className="m-auto">

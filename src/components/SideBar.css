@@ -1,0 +1,29 @@
+.mail-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.nav .flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .btn {
+  width: 100%;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+
+.nav-link {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  color: #333;
+  font-weight: 500;
+}
+
+.nav-link:hover, .nav-link.active {
+  background-color: #f1f3f4;
+  color: #1a73e8;
+}

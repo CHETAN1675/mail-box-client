@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate,useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-
-
 import Sidebar from "./Sidebar";
 import { DB_URL } from "../firebaseDB";
 import "./MailView.css";
 
 export default function MailView() {
-  const { box, mailId } = useParams(); // box is inbox or sent
+  const { box, mailId } = useParams(); 
   const [mail, setMail] = useState(null);
-const currentEmail = useSelector((state) => state.auth.email) || "";
-  const emailKey = currentEmail.replace(/\./g, "_");
 
+  const currentEmail = useSelector((state) => state.auth.email) || "";
+  const emailKey = currentEmail.replace(/\./g, "_");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,7 +61,7 @@ const currentEmail = useSelector((state) => state.auth.email) || "";
   try {
     await fetch(url, { method: "DELETE" });
 
-    navigate(`/mail/${box}`); // go back to inbox/sent list
+    navigate(`/mail/${box}`); 
   } catch (err) {
     console.error("Delete failed:", err);
   }

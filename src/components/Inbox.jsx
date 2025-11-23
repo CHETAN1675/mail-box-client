@@ -1,67 +1,15 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Sidebar from "./Sidebar";
-import { DB_URL } from "../firebaseDB";
+import useFetchMails from "../hooks/useFetchMails";
 import "./Inbox.css";
 import "./MailRow.css";
 
 export default function Inbox() {
-  const [mails, setMails] = useState([]);
-   const [unreadCount, setUnreadCount] = useState(0);
+ 
+ const email = useSelector((state) => state.auth.email) || "";
+  const { mails, unreadCount } = useFetchMails("inbox", email);
 
-  const currentEmail = useSelector((state) => state.auth.email) || "";
-  const key = currentEmail.replace(/\./g, "_");
-
-  useEffect(() => {
-    if (!key){
-      setMails([]);
-      setUnreadCount(0);
-      return;
-    };
-let cancelled = false;
-
-    async function loadInbox() {
-      try {
-        const res = await fetch(`${DB_URL}/mails/inbox/${key}.json`);
-        const data = await res.json();
-
-        if (!data) {
-          if(!cancelled){
-          setMails([]);
-          setUnreadCount(0);
-          }
-         
-          return;
-        }
-
-        const arr = Object.entries(data).map(([id, mail]) => ({
-          id,
-          ...mail,
-        }));
-
-        arr.sort((a, b) => (b.timestamp || 0)- (a.timestamp || 0));
-        if(!cancelled){
-          const newIds = arr.map((m) => m.id).join(",");
-          const oldIds = mails.map((m) => m.id).join(",");
-            if (newIds !== oldIds) {
-          setMails(arr);
-            }
-            const newUnread = arr.filter((m)=>m.read!==true).length;
-        if (newUnread !== unreadCount)  setUnreadCount(newUnread);
-        }
-      } catch (err) {
-        console.error("Error loading inbox:", err);
-      }
-    }
-
-    loadInbox();
-    const interval = setInterval(loadInbox, 2000); // poll every 2 seconds
-    return () => {
-      cancelled = true;
-      clearInterval(interval);
-    };
-  }, [key, mails, unreadCount]);
 
   return (
     <div style={{ display: "flex", gap: 20 }}>
