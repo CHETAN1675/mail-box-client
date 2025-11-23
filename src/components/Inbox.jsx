@@ -19,7 +19,7 @@ export default function Inbox() {
       setUnreadCount(0);
       return;
     };
-let cancelled;
+let cancelled = false;
 
     async function loadInbox() {
       try {
@@ -42,8 +42,13 @@ let cancelled;
 
         arr.sort((a, b) => (b.timestamp || 0)- (a.timestamp || 0));
         if(!cancelled){
+          const newIds = arr.map((m) => m.id).join(",");
+          const oldIds = mails.map((m) => m.id).join(",");
+            if (newIds !== oldIds) {
           setMails(arr);
-          setUnreadCount(arr.filter((m)=>m.read!==true).length);
+            }
+            const newUnread = arr.filter((m)=>m.read!==true).length;
+        if (newUnread !== unreadCount)  setUnreadCount(newUnread);
         }
       } catch (err) {
         console.error("Error loading inbox:", err);
@@ -51,12 +56,12 @@ let cancelled;
     }
 
     loadInbox();
-    const interval = setInterval(loadInbox, 15000); // refresh every 15s
+    const interval = setInterval(loadInbox, 2000); // poll every 2 seconds
     return () => {
       cancelled = true;
       clearInterval(interval);
     };
-  }, [key]);
+  }, [key, mails, unreadCount]);
 
   return (
     <div style={{ display: "flex", gap: 20 }}>

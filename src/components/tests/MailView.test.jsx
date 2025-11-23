@@ -43,7 +43,7 @@ describe("MailView Component", () => {
   // 1. Load mail content
   // --------------------------------------
   it("loads and displays mail content", async () => {
-    global.fetch = jest.fn().mockResolvedValue({
+    fetch = jest.fn().mockResolvedValue({
       json: () =>
         Promise.resolve({
           subject: "Hello World",
@@ -84,7 +84,7 @@ describe("MailView Component", () => {
 
     await screen.findByText("New Mail");
 
-    expect(global.fetch).toHaveBeenCalledWith(
+    expect(fetch).toHaveBeenCalledWith(
       expect.stringContaining(`/mails/inbox/${emailKey}/123.json`),
       expect.objectContaining({
         method: "PATCH",
@@ -108,6 +108,7 @@ describe("MailView Component", () => {
           date: 1725859911111
         })
     });
+    
 
     renderWithProviders(<MailView />);
 
